@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../Pictures/Screenshots/images.jpeg" type="image/x-icon">
+    <title>Calculador de Costo por Horas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Conversor de Horas a Costo</h2>
+       <img src="../Pictures/Screenshots/ibvn-logo-reg-iglesia-bautista-vida-nueva-reg.svg" width="20%" height="20%">
+        <p class="text-center">Ingrese la hora de llegada y de salida. Cada hora tiene un costo de $1, redondeado hacia arriba.</p>
+        
+        <div class="card p-4 shadow-sm">
+            <form id="hourForm">
+                <div class="mb-3">
+                    <label for="horaLlegada" class="form-label">Hora de Llegada</label>
+                    <input type="time" class="form-control" id="horaLlegada" required>
+                </div>
+                <div class="mb-3">
+                    <label for="horaSalida" class="form-label">Hora de Salida</label>
+                    <input type="time" class="form-control" id="horaSalida" required>
+                </div>
+                <button type="button" class="btn btn-primary w-100" onclick="calcularCosto()">Calcular Costo</button>
+            </form>
+            
+            <div id="resultado" class="mt-4 text-center"></div>
+        </div>
+    </div>
+
+    <script>
+        function calcularCosto() {
+            // Obtener valores de entrada
+            const horaLlegada = document.getElementById("horaLlegada").value;
+            const horaSalida = document.getElementById("horaSalida").value;
+            
+            if (!horaLlegada || !horaSalida) {
+                document.getElementById("resultado").innerHTML = '<p class="text-danger">Por favor, complete ambas horas.</p>';
+                return;
+            }
+
+            // Convertir a Date objetos para cálculos
+            const llegada = new Date(`1970-01-01T${horaLlegada}:00`);
+            const salida = new Date(`1970-01-01T${horaSalida}:00`);
+            
+            // Verificar si la salida es anterior a la llegada
+            if (salida <= llegada) {
+                document.getElementById("resultado").innerHTML = '<p class="text-danger">La hora de salida debe ser posterior a la de llegada.</p>';
+                return;
+            }
+
+            // Calcular diferencia en horas y redondear hacia arriba
+            const diferenciaHoras = (salida - llegada) / (1000 * 60 * 60);
+            const horasRedondeadas = Math.ceil(diferenciaHoras); // Redondeo hacia arriba
+            const costoTotal = horasRedondeadas * 1; // 1 dólar por hora redondeada
+
+            // Mostrar resultado
+            document.getElementById("resultado").innerHTML = `<h5 class="text-success">Costo total: $${costoTotal}</h5>`;
+        }
+    </script>
+</body>
+</html>
